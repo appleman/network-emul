@@ -142,32 +142,11 @@ class BandwidthMonitor(app_manager.RyuApp):
         #  self.topo.ports[switch name][port number])
 
         # [ ADD YOUR CODE HERE ]
-        #prntStr = "statsReplyHandler: name:" + name
         if name in self.topo.edgeSwitches.keys():
-            #print prntStr + "; type(body): %s; len(body): %d" % (type(body), len(body))
-            ix = 0
             for stat in body:
-                #print prntStr + "; body[%d]: port_no: %d; rx_bytes %d; tx_bytes %d" % \
-                #    (ix, stat.port_no, stat.rx_bytes, stat.tx_bytes)
                 if stat.port_no in self.topo.ports[name].keys():
                    if self.topo.ports[name][stat.port_no] in self.topo.hosts.keys():
-                       #print prntStr + "; body[%d]: self.topo.ports[%s][%d]: %s" % \
-                       #      (ix, name, stat.port_no, self.topo.ports[name][stat.port_no])
-                       self.bwstats.addHostBwStat(self.topo.ports[name][stat.port_no], \
-                                                  stat.tx_bytes, stat.rx_bytes)
-
-                ix += 1
-
-            #print prntStr + " self.topo.edgeSwitches[name].neighbors.len(): %d" % \
-            #    (len(self.topo.edgeSwitches[name].neighbors))
-            #print prntStr + " self.topo.edgeSwitches[name].neighbors:" + \
-            #    ', '.join(self.topo.edgeSwitches[name].neighbors)
-            #for host in self.topo.edgeSwitches[name].neighbors:
-                #print prntStr + " self.topo.edgeSwitches[name].neighbors[ix]: %s" % (host)
-                #self.bwstats.addHostBwStat(host, )
-        #else:
-        #    print prntStr + " self.topo.edgeSwitches[name]:" + "None"
-	# [ END MY CODE ]
+                       self.bwstats.addHostBwStat(self.topo.ports[name][stat.port_no],stat.tx_bytes, stat.rx_bytes)
 
         # periodically print tenant bandwidth usage
         self.statsReplied += 1
