@@ -81,18 +81,18 @@ class AdaptivePolicy(object):
         # to find the least utilized switch.
 
         # [REPLACE WITH YOUR CODE]
-        pPfx = "BBI:AdaptivePolicy:minUtilization:"
-        print pPfx + "self.utilization:"
-        pprint(self.utilization)
         
-        utilizationTpls = sorted([(self.utilization[switch], switch) for switch in self.utilization.keys()])
-        print pPfx + "utilizationTpls:"
-        pprint(utilizationTpls)
-
-        return utilizationTpls[0][1]
-
-        # [DEFAULT CODE]
         #return self.utilization.keys()[0]
+        minUtilizedSwitch = self.utilization.keys()[0]
+        minUtilSwitchVal = self.utilization[minUtilizedSwitch] 
+        for switch in self.utilization.keys():
+            if(self.utilization[switch] <= minUtilSwitchVal):
+               minUtilizedSwitch = switch
+               minUtilSwitchVal  = self.utilization[switch]
+
+        return minUtilizedSwitch
+            
+            
 
     def redistribute(self):
         # we're installing flows by destination, so sort by received
