@@ -188,32 +188,18 @@ class StaticPolicy(object):
         for edge in topo.edgeSwitches.values():
             routingTable[edge.dpid] = []
             for h in topo.hosts.values():
-                # don't send edge switch's neighbors up to core
                 if h.name in edge.neighbors:
                     outport = topo.ports[edge.name][h.name]
                 else:
-                    #pPfx = "BBI:StaticPolicy:build:" 
-                    #print pPfx + "host h: " + h.name
-                    #pprint(h)
                     thsVlanId = h.vlans[0]
-                    #print pPfx + "host h.vlans[0]: %d" % (thsVlanId)
                     thsVlanCore = topo.getVlanCore(thsVlanId)
-                    #print pPfx + "thsVlanId: VLANCore:" + thsVlanCore
-
-                    #core = topo.coreSwitches.keys()[0]
-                    #print pPfx + "core: "
-                    #pprint(core)
                     outport = topo.ports[edge.name][thsVlanCore]
-
                 routingTable[edge.dpid].append({
                     'eth_dst' : h.eth,
                     'output' : [outport],
                     'priority' : 2,
                     'type' : 'dst'
                 })
-
-        # [END MY CODE]
-
         return flood.add_arpflood(routingTable, topo)
 
 class DefaultPolicy(object):
@@ -222,7 +208,7 @@ class DefaultPolicy(object):
 
     def build(self, topo):
         routingTable = {}
-
+  
         # use only one core switch
         core = topo.coreSwitches.keys()[0]
         coreDpid = topo.coreSwitches[core].dpid
